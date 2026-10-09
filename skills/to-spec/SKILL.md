@@ -30,7 +30,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A short numbered list of user stories (about 5). Each user story should be in the format of:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -38,7 +38,7 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-One story per distinct behavior, including edge cases and error cases. Do not split a single screen or action into several stories.
+Merge related edge and error cases into one story. Keep every section to one-line bullets; aim for ~60 lines total.
 
 ## Implementation Decisions
 
