@@ -3,9 +3,9 @@
 Find what you want to do, then type the command or just say it.
 
 - **Type `/name`** means it only runs when you type it.
-- **Just ask** means Claude starts it by itself when your request matches.
+- **Just ask** means Claude starts it by itself when your request matches. You can also type `/name` to force it.
 
-## Always on (you do nothing)
+## Usually on (Claude starts these by itself; type `/name` if it didn't)
 
 - **ponytail**: Claude writes the smallest code that solves the task.
 - **i-have-adhd-skill**: answers start with what to do next, in numbered steps.
