@@ -5,35 +5,33 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 # Verification Before Completion
 
-## Overview
+## The rule
 
-**Core principle:** Evidence before claims, always.
+Don't claim work is done, fixed or passing until you have run a command that shows it, in this session, and read its output. Confident claims without evidence are the most common way agent work goes wrong.
 
-**Violating the letter of this rule is violating the spirit of this rule.**
+## Match the evidence to the claim
 
-## The Iron Law
+- Small, local change: the relevant single test file or the analyzer.
+- Before committing: the full unit test suite and the build.
+- Slow suites (integration, e2e, device tests): before a release, or when the change touches that flow; not on every edit.
 
-```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
-```
+## When you can't verify
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+If a check can't run (no device, no network, missing credentials, sandbox limits), say so plainly instead of claiming success or stalling, using the shared ending format:
 
-## The Gate Function
+    Verified: `<command>` → <result>
+    Not verified: <what> (<why>). Run: <command>
 
-```
-BEFORE claiming any status or expressing satisfaction:
+## The gate
 
-1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
-4. VERIFY: Does output confirm the claim?
-   - If NO: State actual status with evidence
-   - If YES: State claim WITH evidence
-5. ONLY THEN: Make the claim
+Before stating any status:
 
-Skip any step = lying, not verifying
-```
+1. Identify the command that proves the claim.
+2. Run the full command, fresh.
+3. Read the whole output: exit code and failure count.
+4. If it confirms the claim, state the claim with the evidence. If not, state the actual status with the evidence.
+
+Skipping a step means the claim is a guess, not a check.
 
 ## Common Failures
 
@@ -47,29 +45,17 @@ Skip any step = lying, not verifying
 | Agent completed | VCS diff shows changes | Agent reports "success" |
 | Requirements met | Line-by-line checklist | Tests passing |
 
-## Red Flags - STOP
+## Warning signs
 
-- Using "should", "probably", "seems to"
-- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
-- About to commit/push/PR without verification
-- Trusting agent success reports
-- Relying on partial verification
-- Thinking "just this once"
-- Tired and wanting work over
-- **ANY wording implying success without having run verification**
+Stop and run the check when you notice any of these:
 
-## Rationalization Prevention
-
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler |
-| "Agent said success" | Verify independently |
-| "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
-| "Different words so rule doesn't apply" | Spirit over letter |
+- Wording like "should", "probably" or "seems to" ("should work now" means run it).
+- Saying "Great!" or "Done!" before the check has run.
+- About to commit, push or open a PR without a check.
+- Trusting a sub-agent's success report; check the diff yourself.
+- Treating a partial check as the full one: a passing linter does not prove the build compiles.
+- Feeling confident, tired or tempted to make an exception "just this once". Confidence is not evidence.
+- Rephrasing a claim so this rule seems not to apply. It still applies.
 
 ## Key Patterns
 
@@ -103,18 +89,6 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
-## When To Apply
+## When to apply
 
-**ALWAYS before:**
-- ANY variation of success/completion claims
-- ANY expression of satisfaction
-- ANY positive statement about work state
-- Committing, PR creation, task completion
-- Moving to next task
-- Delegating to agents
-
-**Rule applies to:**
-- Exact phrases
-- Paraphrases and synonyms
-- Implications of success
-- ANY communication suggesting completion/correctness
+Apply before saying work is done, fixed or passing, before committing or opening a PR, before moving to the next task, and after a sub-agent reports success. It does not apply to conversational statements that make no claim about the state of the work.

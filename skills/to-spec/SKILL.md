@@ -38,7 +38,7 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+One story per distinct behavior, including edge cases and error cases. Do not split a single screen or action into several stories.
 
 ## Implementation Decisions
 

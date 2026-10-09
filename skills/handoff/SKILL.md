@@ -5,7 +5,25 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work.
+
+Save to `.scratch/handoffs/<YYYY-MM-DD>-<slug>.md` in the project (check that `.scratch/` is in `.gitignore`; if not, ask before adding it). Outside a project, use the OS temp dir. Always print the full path.
+
+Use this structure; skip empty sections:
+
+## Goal
+## State: done / in progress / not started
+## Decisions made (and why)
+## Tried and failed (and why it failed)
+## Verified / not verified
+## Git: branch, uncommitted changes, last commit
+## Open questions
+## Next step (the first concrete action)
+## Pointers (specs, tickets, ADRs, files)
+## Suggested skills
+
+End your reply with a line to paste into the new session:
+"Read <path> and continue from 'Next step'."
 
 Include a "suggested skills" section in the document, naming which skills the next agent should call the Skill tool for.
 

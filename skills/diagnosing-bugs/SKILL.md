@@ -7,11 +7,15 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
+**Fast path.** If the error message and stack trace point directly at the cause (typo, null access at a named line, wrong import), fix it, add a regression test at the nearest seam, and skip phases 2–4. Use the full process when the cause isn't obvious or the first fix fails.
+
+Before building a loop, check CLAUDE.md / AGENTS.md / README for the project's test, run and log commands, and use those instead of guessing.
+
 When exploring the codebase, read `GLOSSARY.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
 ## Redact
 
-This skill has you show commands, outputs and captured artifacts. **Redact every secret first**: write `<REDACTED>` in its place. Build loops against env vars, so the credential stays in the environment rather than in what you show. Captured artifacts carry auth headers: quote only the lines that carry the signal.
+Redact every secret (tokens, passwords, keys, auth headers) **and all personal data** (names, phone numbers, emails, addresses, account numbers, amounts tied to a person) before showing output or saving fixtures. Write `<REDACTED>` or a realistic fake in its place; fixtures need realistic fakes so they still exercise the code.
 
 If the redacted output is not enough to diagnose the bug, say so and ask the user.
 
@@ -24,15 +28,16 @@ Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give
 ### Ways to construct one, in roughly this order
 
 1. **Failing test** at whatever seam reaches the bug: unit, integration, e2e.
-2. **Curl / HTTP script** against a running dev server.
+2. **Request script** against a running service (curl, HTTP client, gRPC call), asserting on the response.
 3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
-4. **Headless browser script** (Playwright / Puppeteer) that drives the UI and asserts on DOM/console/network.
-5. **Replay a captured trace.** Save a real network request / payload / event log to disk; replay it through the code path in isolation.
+4. **UI automation** for the platform: browser (Playwright, Puppeteer), mobile (Patrol, Maestro, Espresso, XCUITest), desktop (the framework's driver). Assert on visible state, logs or network.
+5. **Replay captured input.** For data whose format you don't control (webhooks, notifications, uploaded files, third-party API responses, messages from other systems), save real samples as test fixtures (redacted) and run them through the code path. When the external format changes, the fixture becomes the regression test.
 6. **Throwaway harness.** Spin up a minimal subset of the system (one service, mocked deps) that exercises the bug code path with a single function call.
 7. **Property / fuzz loop.** If the bug is "sometimes wrong output", run 1000 random inputs and look for the failure mode.
 8. **Bisection harness.** If the bug appeared between two known states (commit, dataset, version), automate "boot at state X, check, repeat" so you can `git bisect run` it.
 9. **Differential loop.** Run the same input through old-version vs new-version (or two configs) and diff outputs.
-10. **HITL bash script.** Last resort. If a human must click, drive _them_ with `scripts/hitl-loop.template.sh` so the loop is still structured. Captured output feeds back to you.
+10. **HITL bash script.** Last resort. If a human must click, drive _them_ with `scripts/hitl-loop.template.sh` so the loop is still structured. Captured output feeds back to you. On Windows without bash, write the same loop in PowerShell (`Read-Host` for prompts).
+11. **Log stream filter.** Run the app and filter its log stream to the bug's signature (browser console, `adb logcat`, `xcrun simctl log stream`, server logs), so the symptom appears as one line.
 
 Build the right feedback loop, and the bug is 90% fixed.
 

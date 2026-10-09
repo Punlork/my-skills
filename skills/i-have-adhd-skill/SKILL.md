@@ -1,13 +1,10 @@
 ---
 name: i-have-adhd-skill
 description: >
-  Shape output for a reader with ADHD. Use this skill whenever responding to ANY
-  user message including coding tasks, debugging, explanations, planning, and
-  casual conversation. Output should lead with concrete next actions, number
-  multi-step work, externalize state across turns, suppress tangents, give
-  specific time estimates for work and a source for every other number, and
-  make wins visible. Trigger even on casual messages
-  and even when the user did not explicitly ask for brevity.
+  Shape output for a reader with ADHD: lead with the next action, number
+  multi-step work, restate progress, give concrete time estimates and a source
+  for every number, and cut preambles and closers. Use for explanations, plans,
+  debugging, multi-step coding work, and any reply longer than a few sentences.
 ---
 
 # i-have-adhd
@@ -35,9 +32,7 @@ The first line is something the reader can do. Not context. Not a plan. The acti
 
 If the answer is a command, path, or snippet, it goes first. Prose comes after, if at all.
 
-**Exception: the action is performed in front of someone else.** A message to a colleague, a ticket, a review comment, a meeting. Leading with the action assumes a misunderstood action costs a retry — true when the reader acts alone, false here, because the audience is the thing that cannot be undone. The action still leads, but one plain paragraph of the mechanism goes with it: the reader's own vocabulary, no identifiers, no spec references.
-
-The test is whether they could restate the problem to someone who pushes back. Accepting the analysis is not evidence that they can, and the signal that they can't is absent by construction — a reader who cannot restate it usually cannot tell that they cannot. So supply the paragraph unprompted rather than waiting to be asked.
+**Exception: the action is done in front of someone else** (a message to a colleague, a ticket, a review comment, a meeting). There a misunderstood action can't simply be retried, because the audience has already seen it. Still lead with the action, but add one plain paragraph on how the problem works, in the reader's own words, with no identifiers or spec references. Write it without being asked: a reader who can't explain the problem to someone who pushes back usually doesn't know they can't.
 
 - **Bad:** "Ask [the author] three questions: does `syncQueue` guarantee ordering, is `totalElements` authoritative, and why does rule 4.2 not fire?"
 - **Good:** "Ask [the author] whether a second page can arrive before the first finishes saving. Why: the app saves each page as it arrives and counts rows at the end, so if pages overlap the count is taken mid-write. Three specific questions below."
@@ -60,6 +55,8 @@ If anything is left open, name ONE thing the reader can do in under two minutes.
 
 - **Bad:** "Hope that helps. Let me know if you want to dig deeper."
 - **Good:** "Next: run `npm test` and paste the first failing line."
+
+If other skills add closing lines, use the shared ending format: Verified, Not verified, Skipped / risks, then Next last.
 
 ### 4. Suppress tangents
 
@@ -105,9 +102,7 @@ Never use "Uh oh," "Oh no," or "There seems to be a problem." State cause and fi
 - **Bad:** "Uh oh, the test is failing. There seems to be an issue..."
 - **Good:** "Test fails at `auth.spec.ts:42`: expected 200, got 401. Cause: missing auth header. Fix: add `Authorization: Bearer ${token}` to the request."
 
-**When the cause is two mechanisms interacting, trace one case instead of naming both.** Naming each mechanism and joining them with "so", "therefore" or "which means" is not an explanation — the defect lives in the gap between them, the gap is defined by what neither one does, and listing what things *do* cannot convey that. Both halves can be individually correct and the sentence still land as noise.
-
-Trace one concrete case: state before, the input, what each mechanism does to it, state after. A two-row before/after table usually does it.
+**When the cause is two mechanisms interacting, trace one case instead of naming both.** Naming each mechanism and joining them with "so" doesn't explain the bug, because the bug is in what neither one does. Walk one concrete case: the state before, the input, what each mechanism does, and the state after (a two-row before/after table often works).
 
 - **Bad:** "The upsert only touches keys in the payload, so deleted rows survive."
 - **Good:** "Two co-borrowers saved. You delete the second; the payload now carries one key. The upsert writes that one row and leaves the other untouched. The delete list is built by walking the co-borrowers still on screen — one — so it never names the deleted row either. Neither step removes it, and it reappears on reopen."

@@ -32,6 +32,7 @@ Break the work into **tracer bullet** tickets.
 - A completed slice is demoable or verifiable on its own
 - Each slice is sized to fit in a single fresh context window
 - Any prefactoring should be done first
+- If the work spans more than one repository, say in each ticket which repository each part belongs to; prefer tickets that change one repository.
 
 </vertical-slice-rules>
 

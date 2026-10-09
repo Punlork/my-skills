@@ -1,6 +1,8 @@
 ---
 name: create-doc-md
-description: Writes implementation docs for features in the house style of strong engineering orgs — decision-first, non-goals stated, alternatives recorded, grounded in the actual codebase. Use this whenever the user asks for a feature doc, implementation doc, design doc, spec, technical writeup, RFC, or "document this feature" — and also proactively when they're about to build something non-trivial and no doc exists yet, or when they've just finished a feature and want it written up. Applies to both plan-before and record-after docs.
+description: >
+  Writes feature design docs and implementation records: decision-first, non-goals stated, alternatives recorded, every claim grounded in the actual codebase. Use whenever the user asks for a design doc, implementation doc, RFC, technical writeup, or to "document this feature", before building (plan) or after (record).
+disable-model-invocation: true
 ---
 
 # Feature implementation docs
@@ -41,27 +43,7 @@ A change that crosses layers, deletes an existing path, or alters a wire contrac
 
 ## Verify before you assert
 
-Reading the file a claim lives in grounds a claim about that file. It does not ground a claim about what runs, how many there are, who owns it, or what the contract says. Each of those is a separate check, and each is cheap compared to the recommendation being built on top of it.
-
-**Never write that something is absent without looking for a hand-rolled one.** A dependency manifest answers "did they buy it", not "do they have it", and a mature team builds the capability instead of importing it — so a vendor-name grep under-detects exactly the codebases most likely to have it. Before writing "no X": list the repo's own instruction and doc directories (`docs/`, `.cursor/`, an agent-instructions folder, `CONTRIBUTING`), and grep first-party source for the concept (`*logger*`, `*telemetry*`), not the package name. State the gap as what the existing implementation doesn't do, never as absence.
-
-**Verify edges, not nodes.** A subsystem guide reads identically whether its call chain is wired or not, so prose describing one is not evidence it runs. For each claimed call, grep the callee's identifier and confirm a caller outside its own definition and its DI registration. Registered but never resolved, and constructed but never installed, are the two recurring shapes. Mark each claim verified or asserted.
-
-**Source behaviour from the dispatch site, never from the best-named handler.** Start at the widget or endpoint the reporter actually touched and grep for what it dispatches, before reading any handler. A name describes what code is for, not whether it executes. Where two handlers can serve one action, both stay in scope until the dispatch site rules one out — and a test written against the assumed handler will pass and prove nothing.
-
-**Count before citing a line.** A grep hit locates an instance; only a count establishes the population. Run the pattern over at least the whole file, state how many sites exist, and classify each — same defect, harmless copy, or untraced. Understanding the mechanism is what suppresses this step, because the explanation already feels complete. A copy whose consequence is unknown is a finding, not a footnote.
-
-**Date the construct before characterising it.** `git log -L` the suspect code and the change that makes it wrong, then take the framing from the result: predates it → a stale invariant, raise as drift; postdates it → a considered decision, raise as a question about what the author knows; same change → an oversight. Defensive code near the defect is evidence the author modelled the mechanism and may hold a constraint you haven't found. Report the defect from the code; choose the framing from the history.
-
-**Blame the file before recommending a change to it.** `git blame --line-porcelain <file> | grep '^author ' | sort | uniq -c | sort -rn`. Run it before recommending, so the doc can say "42% yours", and again when someone declines on ownership grounds — a limit that is true of the codebase in general is routinely false for the specific file, and accepting the generalisation discards the one actionable item along with the rest.
-
-**Find the contract before comparing two artifacts.** A two-way diff can establish that two things disagree, never which is wrong — and it yields a verdict-shaped result anyway. Search for an OpenAPI/swagger file, schema registry, `.proto` or interface doc first, and name it in the writeup with its date. If there is none, write "no canonical contract found, comparing two implementations"; that sentence is itself the finding.
-
-**Then check whether the contract is generated or authored, and how it is dated.** A generated spec has traded independence for accuracy about a moment: it is a timestamped mirror of the implementation. So it cannot convict a payload newer than itself, though it still convicts any consumer that disagrees with it — the honest verdict is often asymmetric, one side convicted and the other merely unresolved. When it is generated, re-pulling it is a stronger next action than questioning anyone, because it regenerates from the code that produced the payload.
-
-**Ask who owns preventing a defect found in a fixture.** A mock, sample payload or generated snapshot is not production. Before recommending a defensive fix, establish whether the upstream producer can emit it — the contract's own validity or error channel is evidence that it validates. If it can't, the finding is a fixture defect and the fix is to correct the fixture. Then look for the residue: the variant of the same failure the producer genuinely cannot prevent — independent caches, separate sync paths, version skew between client and contract. That residue belongs to the consumer, and it is usually much smaller than the original finding.
-
-**When the change removes or narrows a destructive step, ask what it was covering for.** A blanket `DELETE` replaced by in-place upserts is the recurring shape. The plan will carefully specify what the new cleanup must spare and skip the inverse question: which downstream writes were correct only because a prior unconditional delete had already emptied the table? Those writes are unchanged, several call levels away, and invisible in the diff of the changed function. Enumerate them and list each in Risks.
+Every claim comes from code read in this session. When the doc analyzes existing behavior, a defect, or someone else's code, load `references/investigation.md` first and follow it.
 
 ## Template
 
@@ -211,6 +193,8 @@ Every claim points at something a reviewer can check, and the two decisions wort
 ## Done when
 
 Every line below is a property of the draft, checkable against the draft. An item you cannot settle by pointing at something has failed, not passed — the whole point of this list is that recalling your own good intentions is not how it gets answered.
+
+For the **Small** tier, check only: grounded claims, shorter than the diff, one subject, no marketing words. The full list applies to Standard and Risky docs.
 
 - The doc is shorter than the diff it describes, or says why it isn't. `git diff --stat` against `wc -l`.
 - The doc has one subject, and the size tier was chosen for this document rather than for the branch it happens to share.
