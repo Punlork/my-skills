@@ -27,6 +27,7 @@ Find what you want to do, then type the command or just say it.
 | Check the whole repo for problems | Say "audit this repo" |
 | See the shortcuts Claude left in code | Say "ponytail debt" |
 | Draw a diagram | `/diagram-design` |
+| Get a senior UI/UX review of a screen, flow or Flutter UI | `/ux-review <screen, file or artifact link>` |
 | Have the last answer explained again | `/wait-what` |
 | Agree on the names of things in the project | Say "update the glossary" |
 | Stop now and continue in a new chat | `/handoff`, then paste the line it gives you into the new chat |
