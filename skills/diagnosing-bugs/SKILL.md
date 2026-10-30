@@ -7,7 +7,9 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
-**Fast path.** If the error message and stack trace point directly at the cause (typo, null access at a named line, wrong import), fix it, add a regression test at the nearest seam, and skip phases 2–4. Use the full process when the cause isn't obvious or the first fix fails.
+**Fast path.** If the error message and stack trace point directly at the cause (typo, null access at a named line, wrong import), fix it, add a regression test at the nearest seam, and skip phases 2–4. Use the full process when the cause isn't obvious or the first fix fails. Fix the cause: a null check or try/catch that only hides the crash is not a fix.
+
+**Attack the premise.** If two fixes built on the same assumption both fail, stop. Write the assumption in one sentence and question it before trying a third fix.
 
 Before building a loop, check CLAUDE.md / AGENTS.md / README for the project's test, run and log commands, and use those instead of guessing.
 

@@ -44,6 +44,15 @@ Take the first option that fully works:
 
 Never cut: validation at trust boundaries, error handling that prevents data loss, security, accessibility, the calibration real hardware needs, anything the user asked for.
 
+## Mobile code (Flutter/Dart, Kotlin, Swift)
+
+- Parse outside data (API JSON, deep links, platform channels, local storage) once, at the edge, into strict typed models: freezed/sealed classes in Dart, data/sealed classes in Kotlin, Codable structs/enums in Swift. Inside the app, trust the model. Keep business logic in pure functions, out of widgets, views and ViewModels when practical.
+- Make illegal states unrepresentable: a sealed Loading/Data/Error, not nullable flags.
+- Never silence the analyzer or compiler (`// ignore:`, `!`, `as`, `@Suppress`, `try!`) unless the user approves and a comment gives the reason.
+- Retries, offline sync, background jobs, payments and push handlers must end in the same state if run twice or after a crash midway.
+- A new requirement doesn't fit the design? Ask "what would I build if this had been required from day one?", then deliver that in small steps.
+- Before adding code, look for complexity to remove.
+
 ## Levels
 
 | Level | Behavior |

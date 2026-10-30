@@ -30,3 +30,5 @@ Where each skill in `skills/` came from. Commit is the upstream commit the copy 
 | create-doc-md | own | - | own | - |
 
 code-review (mattpocock/skills, MIT) was removed in "Improve skills with update-skills-prompt.md"; see git history.
+
+Rules merged into ponytail, tdd and diagnosing-bugs from ub-mode (https://github.com/unclebob/ub-mode, SKILL.md): boundary and type discipline, idempotent operations, redesign instead of bolting on, behavior-based tests, root causes, attack the premise, subtract before adding. Reworded for Flutter, Kotlin and Swift; its crapper, dryer and mutator tools, push-to-main, action log and worktree cleanup were not taken.
